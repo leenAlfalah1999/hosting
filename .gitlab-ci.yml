@@ -1,0 +1,17 @@
+stages:
+  - deploy
+
+pages:
+  stage: deploy
+  image: node:lts
+  artifacts:
+    paths:
+      - public
+  script:
+    - yarn
+    - yarn build
+    - mkdir .public
+    - cp -r ./dist/* .public
+    - rm -rf public
+    - mv .public public
+
