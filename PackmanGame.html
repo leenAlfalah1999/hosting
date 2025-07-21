@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Find the Packman</title>
+  <script src="https://unpkg.com/@rive-app/canvas@2.11.1"></script>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+      background-color: transparent;
+    }
+    canvas {
+      display: block;
+      width: 100vw;
+      height: 100vh;
+      background-color: transparent;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 9999;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="riveCanvas"></canvas>
+
+  <script>
+    const canvas = document.getElementById("riveCanvas");
+    const dpr = window.devicePixelRatio || 1;
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+
+    const riveInstance = new rive.Rive({
+  src: "https://raw.githubusercontent.com/leenAlfalah1999/hosting/main/packmanGameEn.riv",
+  canvas: canvas,
+  autoplay: true,
+  stateMachines: ["Cards"],
+  devicePixelRatio: dpr,
+  onLoad: () => {
+    const inputs = riveInstance.stateMachineInputs("Cards");
+    const trigger = inputs.find(i => i.name === "SpadeClick");
+    if (trigger) {
+      canvas.addEventListener("click", () => {
+        trigger.fire();
+      });
+    } else {
+      console.warn("Input 'SpadeClick' not found in the State Machine.");
+    }
+  }
+});
+
+    window.addEventListener("resize", () => {
+      const newWidth = window.innerWidth;
+      const newHeight = window.innerHeight;
+      const newDpr = window.devicePixelRatio || 1;
+      canvas.width = newWidth * newDpr;
+      canvas.height = newHeight * newDpr;
+      canvas.style.width = newWidth + "px";
+      canvas.style.height = newHeight + "px";
+    });
+  </script>
+</body>
+</html>
